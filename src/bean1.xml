@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+<!-- default-autowire-candidates="*Writer" -->
+	<bean id="person" class="main.webapp.test.Person" init-method="initMethod"
+		destroy-method="destMethod" scope="singleton" factory-method="getInstance">
+		<constructor-arg name="id" value="111"></constructor-arg>
+		<constructor-arg name="name" value="Shradha"></constructor-arg>
+		<property name="taxId" value="222"></property>
+		<property name="address" ref="address"></property>
+	</bean>
+
+	<bean id="person2" class="main.webapp.test.Person" init-method="initMethod"
+		destroy-method="destMethod" scope="singleton" factory-method="getInstance"
+		factory-bean="personFactory">
+		<constructor-arg name="id" value="111"></constructor-arg>
+		<constructor-arg name="name" value="Bimal"></constructor-arg>
+		<property name="taxId" value="222"></property>
+		<property name="address" ref="address"></property>
+	</bean>
+
+
+	<bean id="address" class="main.webapp.test.Address">
+		<constructor-arg name="street" value="JesephStreet"></constructor-arg>
+		<constructor-arg name="postCode" value="756001"></constructor-arg>
+	</bean>
+	<bean id="address2" class="main.webapp.test.Address" p:street="usingPnamesspace_street"
+		p:postCode="usingPnamespace_postcode">
+
+	</bean>
+
+	<bean id="personFactory" class="main.webapp.test.PersonFactory"></bean>
+
+	<bean id="fruitbasket" class="main.webapp.test.FruitBasket">
+		<constructor-arg value="John's Basket "></constructor-arg>
+		<constructor-arg>
+			<set>
+				<value>Banana</value>
+				<value>Apple</value>
+				<value>Orange</value>
+				<value>Pear</value>
+				<value>Kiwi</value>
+				<value>Banana</value>
+			</set>
+		</constructor-arg>
+	</bean>
+
+	<bean id="lion" class="main.webapp.test.List.Animal">
+		<property name="name" value="Igor"></property>
+		<property name="type" value="lion"></property>
+	</bean>
+	<bean id="snake" class="main.webapp.test.List.Animal">
+		<property name="name" value="Bob"></property>
+		<property name="type" value="snake"></property>
+	</bean>
+
+	<!-- Using InnerBeans and list initialization which contanins beans -->
+	<bean id="jungle" class="main.webapp.test.List.Jungle">
+		<property name="largest">
+			<!-- Defining inner bean here no need of Id -->
+			<bean class="main.webapp.test.List.Animal">
+
+				<property name="name" value="Joseph"></property>
+				<property name="type" value="elephant"></property>
+			</bean>
+
+
+		</property>
+		<!-- Using List containing another beans-->
+		<property name="animals">
+			<list>
+				<ref bean="lion" />
+				<ref bean="snake" />
+
+
+			</list>
+
+		</property>
+
+<!-- Initializing a map which does not use bean by property map -->
+		<property name="foods">
+		<props>
+			<prop key="gorilla">banana</prop>
+			<prop key="snake">eggs</prop>
+			<prop key="panda">bamboo</prop>
+		</props>
+		</property>
+
+<!-- Initializing a map which do use bean by map(Map as bean properties) -->
+		<property name="animalsMap">
+			<map>
+				<entry key="first" value-ref="lion" />
+				<entry key="second" value-ref="snake" />
+			 
+			</map>
+		</property>
+	</bean>
+	
+	
+	
+	<!-- AutoWire by name and type-->
+<!-- 	<bean id="logger" class="main.webapp.test.AutoWire.Logger" autowire="byName">
+	</bean>
+	<bean id="consoleWriter"
+		class="main.webapp.test.AutoWire.ConsoleWriter">
+	</bean>
+	<bean id="fileWriter"
+		class="main.webapp.test.AutoWire.FileWriter">
+	</bean>
+	<bean id="filewriter2"
+		class="main.webapp.test.AutoWire.FileWriter">
+	</bean>
+</beans> -->
+
+
+<!-- AutoWire by constructor only works auto wire by type  autowire="constructor" defined default autowire candidate beans-->
+  	<bean id="logger" class="main.webapp.test.AutoWire.Logger" >
+	</bean>
+	<bean id="consoleWriter" class="main.webapp.test.AutoWire.ConsoleWriter">
+	</bean>
+	<!-- <bean id="fileWriter" class="main.webapp.test.AutoWire.FileWriter">
+	</bean>
+	  -->
+
+	<context:annotation-config></context:annotation-config>
+</beans>
+
+<!-- Autowire candidate attribute can be set as false to resolve ambiguity or primary can be set to true 
+primary will be choosen first and the other bean can be wutowired by 
+name but if we make that as autowire candidate false then it is not going to auto wire in any form
+-->
+
