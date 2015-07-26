@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="person" class="main.webapp.test.Person" init-method="initMethod"
+		destroy-method="destMethod" scope="singleton" factory-method="getInstance">
+		<constructor-arg name="id" value="111"></constructor-arg>
+		<constructor-arg name="name" value="Shradha"></constructor-arg>
+		<property name="taxId" value="222"></property>
+		<property name="address" ref="address"></property>
+	</bean>
+	
+	<bean id="person2" class="main.webapp.test.Person" init-method="initMethod"
+		destroy-method="destMethod" scope="singleton" factory-method="getInstance"
+		factory-bean="personFactory">
+		<constructor-arg name="id" value="111"></constructor-arg>
+		<constructor-arg name="name" value="Bimal"></constructor-arg>
+		<property name="taxId" value="222"></property>
+		<property name="address" ref="address"></property>
+	</bean>
+
+
+	<bean id="address" class="main.webapp.test.Address">
+		<constructor-arg name="street" value="JesephStreet"></constructor-arg>
+		<constructor-arg name="postCode" value="756001"></constructor-arg>
+	</bean>
+	<bean id="address2" class="main.webapp.test.Address" p:street="usingPnamesspace_street" p:postCode="usingPnamespace_postcode">
+		 
+	</bean>
+
+	<bean id="personFactory" class="main.webapp.test.PersonFactory"></bean>
+
+	<bean id="fruitbasket" class="main.webapp.test.FruitBasket">
+		<constructor-arg value="John's Basket "></constructor-arg>
+		<constructor-arg>
+			<set>
+				<value>Banana</value>
+				<value>Apple</value>
+				<value>Orange</value>
+				<value>Pear</value>
+				<value>Kiwi</value>
+				<value>Banana</value>
+			</set>
+		</constructor-arg>
+	</bean>
+</beans>
